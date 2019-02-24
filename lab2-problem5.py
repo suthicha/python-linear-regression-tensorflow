@@ -48,6 +48,11 @@ Step 6: Using gradient descent with learning rate of 0.001 to minimize loss
 '''
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001).minimize(loss_function)
 
+'''
+Step 6.1: Specify a batch size for training
+'''
+batch_size = 50
+
 with tf.Session() as session:
     '''
     Step 7: Initialize the necessary variables, i.e. theta0 and theta1
@@ -71,13 +76,13 @@ with tf.Session() as session:
         #   https://en.wikipedia.org/wiki/Stochastic_gradient_descent#Iterative_method
         # You may see it as a reference
 
-        random_index = np.random.choice(number_of_samples)
-        randomized_x = data.T[0][random_index]
-        randomized_y = data.T[1][random_index]
+        random_index = np.random.choice(number_of_samples, size=batch_size)
+        randomized_X = data.T[0][random_index]
+        randomized_Y = data.T[1][random_index]
 
-        session.run(optimizer, feed_dict={X: randomized_x, Y: randomized_y})
+        session.run(optimizer, feed_dict={X: randomized_X, Y: randomized_Y})
 
-        cost = session.run([loss_function], feed_dict={X: randomized_x, Y: randomized_y})
+        cost = session.run([loss_function], feed_dict={X: randomized_X, Y: randomized_Y})
 
         print("Epoch: {0}, cost = {1}, theta0 = {2}, theta1 = {3}".format(i + 1, cost,
                                                                           session.run(theta0), session.run(theta1)))
@@ -86,7 +91,7 @@ with tf.Session() as session:
     Step 9: Prints the training cost, theta0, and theta1
     '''
     print("Optimization Finished!")
-    training_cost = session.run(loss_function, feed_dict={X: randomized_x, Y: randomized_y})
+    training_cost = session.run(loss_function, feed_dict={X: randomized_X, Y: randomized_Y})
     print("Cost =", training_cost, "theta0 = ", session.run(theta0), "theta1 = ", session.run(theta1), '\n')
 
     '''
